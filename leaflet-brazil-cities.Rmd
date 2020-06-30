@@ -1,0 +1,38 @@
+---
+title: "R-Markdown-and-Leaflet"
+date: "30 / 06 / 2020"
+output: html_document
+---
+
+### Load Libraries
+
+```{r}
+library(leaflet)
+library(dplyr)
+library(htmltools)
+```
+
+### Cities from Brazil with the respective population
+
+- Take a look how big Brazil is:
+
+```{r}
+brazil.cities <- subset(read.csv("worldcities.csv"), country == "Brazil")
+
+map <- leaflet() %>%
+  addTiles() %>%
+  addMarkers(lng = brazil.cities$lng,
+             lat = brazil.cities$lat,
+             popup =paste(brazil.cities$city, "<br>Population: ",
+                          formatC(brazil.cities$population, format = "d", big.mark = ",")
+             )
+  ) %>% 
+  addCircles(lng    = brazil.cities$lng, 
+             lat    = brazil.cities$lat, 
+             weight = 1,
+             radius = sqrt(brazil.cities$population) * 20)
+map
+```
+
+
+
